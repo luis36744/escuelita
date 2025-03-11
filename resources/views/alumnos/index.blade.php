@@ -20,6 +20,7 @@
                     <th>Correo</th>
                     <th>Fecha de Nacimiento</th>
                     <th>Ciudad</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,10 @@
                         <td>{{ $alumno->correo }}</td>
                         <td>{{ $alumno->fecha_nacimiento }}</td>
                         <td>{{ $alumno->ciudad }}</td>
+                        <td>
+                            <a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('alumnos.edit', $alumno) }}" class="btn btn-warning btn-sm">Editar</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -7,26 +7,23 @@ use Illuminate\Http\Request;
 
 class AlumnoController extends Controller
 {
-    // Mostrar la lista de alumnos
     public function index()
     {
         $alumnos = Alumno::all();
         return view('alumnos.index', compact('alumnos'));
     }
 
-    // Mostrar el formulario de creación
     public function create()
     {
         return view('alumnos.create');
     }
 
-    // Guardar un nuevo alumno
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'correo' => 'required|email|unique:alumnos,correo',
-            'fecha_nacimiento' => 'required|date',
+            'correo' => 'required|email|unique:alumnos,correo|max:255',
+            'fecha_nacimiento' => 'required|date|before:today',
             'ciudad' => 'required|string|max:255',
         ]);
 
@@ -35,9 +32,37 @@ class AlumnoController extends Controller
         return redirect()->route('alumnos.index')->with('success', 'Alumno registrado con éxito');
     }
 
-    // Otros métodos generados por el resource (puedes implementarlos si quieres)
-    public function show(Alumno $alumno) {}
-    public function edit(Alumno $alumno) {}
-    public function update(Request $request, Alumno $alumno) {}
-    public function destroy(Alumno $alumno) {}
+    // Mostrar un alumno específico
+    public function show(Alumno $alumno)
+    {
+        return view('alumnos.show', compact('alumno'));
+    }
+
+    // Mostrar formulario de edición
+    public function edit(Alumno $alumno)
+    {
+        return view('alumnos.editar-alumno', compact('alumno'));
+    }
+
+    // Actualizar un alumno existente
+    public function update(Request $request, Alumno $alumno)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'correo' => 'required|email|max:255|unique:alumnos,correo,' . $alumno->id,
+            'fecha_nacimiento' => 'required|date|before:today',
+            'ciudad' => 'required|string|max:255',
+        ]);
+
+        $alumno->update($request->all());
+
+        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado con éxito');
+    }
+
+    // Opcional: Eliminar (si lo necesitas más adelante)
+    public function destroy(Alumno $alumno)
+    {
+        $alumno->delete();
+        return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado con éxito');
+    }
 }
