@@ -34,6 +34,11 @@
                         <td>
                             <a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-info btn-sm">Ver</a>
                             <a href="{{ route('alumnos.edit', $alumno) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('alumnos.destroy', $alumno) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar a {{ $alumno->nombre }}?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
